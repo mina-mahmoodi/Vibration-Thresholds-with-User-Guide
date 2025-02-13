@@ -109,13 +109,22 @@ if uploaded_file is not None:
             show_help = True
 
 # Button to show help
-if show_help:
-    help_button = st.button("Show Help")
-    if help_button:
-        import streamlit as st
-        # Read HTML file with 'latin-1' encoding
-        with open("help.htm", "r", encoding="latin-1") as file:
-            help_html = file.read()
+show_help = False  # Define a flag to control whether help is shown
 
-        # Display HTML content in Streamlit
-        st.markdown(help_html, unsafe_allow_html=True)
+# Show button to trigger the help display
+show_help = st.button("Show Help")
+
+if show_help:
+    # Try reading the HTML file with multiple encodings
+    encodings = ["utf-8", "latin-1", "utf-16"]
+    for encoding in encodings:
+        try:
+            with open("help.htm", "r", encoding=encoding) as file:
+                help_html = file.read()
+            break  # If successful, break out of the loop
+        except UnicodeDecodeError:
+            continue  # Try the next encoding if the current one fails
+
+    # Display HTML content in Streamlit
+    st.markdown(help_html, unsafe_allow_html=True)
+
