@@ -12,6 +12,9 @@ st.title("Motor Threshold Prediction App")
 # Step 1: File Upload
 uploaded_file = st.file_uploader("Upload your CSV file (e.g., Statistical summary.csv)", type="csv")
 
+# Initialize variable to check if help icon should be shown
+show_help = False
+
 if uploaded_file is not None:
     # Step 2: Load and Display the Data
     df = pd.read_csv(uploaded_file)
@@ -76,6 +79,8 @@ if uploaded_file is not None:
         if motor_size_input not in existing_motor_sizes:
             # Display message for motor sizes not found in the dataset
             st.write(f"Motor size {motor_size_input} kW not found in the dataset. Please add statistical parameters for this motor size to the Statistical summary.csv and upload it again.")
+            # Show the help button
+            show_help = True
         else:
             # Filter the grouped data to get the features for this motor size
             motor_data = grouped_data[grouped_data["Motor Output Power (kW)"] == motor_size_input]
@@ -100,12 +105,15 @@ if uploaded_file is not None:
             st.write(f"  X Warning: {predicted_thresholds[0][0]:.3f}, X Error: {predicted_thresholds[0][1]:.3f}")
             st.write(f"  Y Warning: {predicted_thresholds[0][2]:.3f}, Y Error: {predicted_thresholds[0][3]:.3f}")
             st.write(f"  Z Warning: {predicted_thresholds[0][4]:.3f}, Z Error: {predicted_thresholds[0][5]:.3f}")
+            # Show the help button
+            show_help = True
 
-            # After prediction, show the help button
-            if st.button('Show Help'):
-                # Read HTML file with 'latin-1' encoding
-                with open("help.htm", "r", encoding="latin-1") as file:
-                    help_html = file.read()
+# Display help content if the button has been triggered
+if show_help:
+    import streamlit as st
+    # Read HTML file with 'latin-1' encoding
+    with open("help.htm", "r", encoding="latin-1") as file:
+        help_html = file.read()
 
-                # Display HTML content in Streamlit
-                st.markdown(help_html, unsafe_allow_html=True)
+    # Display HTML content in Streamlit
+    st.markdown(help_html, unsafe_allow_html=True)
