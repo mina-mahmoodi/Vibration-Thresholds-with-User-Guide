@@ -100,11 +100,12 @@ if uploaded_file is not None:
             st.write(f"  X Warning: {predicted_thresholds[0][0]:.3f}, X Error: {predicted_thresholds[0][1]:.3f}")
             st.write(f"  Y Warning: {predicted_thresholds[0][2]:.3f}, Y Error: {predicted_thresholds[0][3]:.3f}")
             st.write(f"  Z Warning: {predicted_thresholds[0][4]:.3f}, Z Error: {predicted_thresholds[0][5]:.3f}")
-import streamlit as st
 
-# Read HTML file with 'latin-1' encoding
-with open("help.htm", "r", encoding="latin-1") as file:
-    help_html = file.read()
+            # After prediction, show the help button
+            if st.button('Show Help'):
+                # Read HTML file with 'latin-1' encoding
+                with open("help.htm", "r", encoding="latin-1") as file:
+                    help_html = file.read()
 
-# Display HTML content in Streamlit
-st.markdown(help_html, unsafe_allow_html=True)
+                # Display HTML content in Streamlit
+                st.markdown(help_html, unsafe_allow_html=True)
